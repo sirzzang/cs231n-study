@@ -273,6 +273,113 @@ The problem is that, in order to densely cover the space, we need a number of tr
 
 <br>
 
-### Summary
+### Summary: KNN
 
 ![image-20201004212007342](images/image-20201004212007342.png)
+
+<br>
+
+
+
+
+
+## 3. Linear Classification
+
+
+
+### Parametric Approach
+
+
+
+ Let's take a different approach from KNN. KNN classifiers have no parameters. They just keep around the whole training data and use them at test time. However, we can think of another classifier that comprises of two different components.
+
+* Takes in the input data(*= images, $$X$$*). 
+* Summarizes the knowledge of input data, and stick with that information into a parameter(*= weights, $$W$$*). 
+
+
+
+ In this point of view, what we have to do is to write down a function of $$X$$ and $$W$$, which spits out numbers each of which describes class scores. The larger the score, the larger the probability for the class. This is called **Parametric Models**, and the functional form of each model results in different architecture. The difference between KNN classifiers and parametric models is that, with parametric approach, once we have trained matrix $$W$$, we can *throw out* training data and get score for new sample. Much more efficient!
+
+
+
+### Linear Classifier
+
+
+
+ Actually, the whole story of deep learning is coming up with the right structure for the function *f*. One of the simplest functions of the kind is a funcional form of simple **matrix vector multiply**. 
+
+
+
+![image-20201005195019659](images/image-20201005195019659.png)
+
+ Unpack the dimension of each term!
+
+* $$X$$: input image flattened.
+* $$output$$ : single column vector of N elements, where N represents the number of classes.
+
+<br>
+
+ Here, we can add **bias** term. 
+
+ ![image-20201005202149270](images/image-20201005202149270.png)
+
+ The bias term is a constant vector, which does not interact with the data. This term indicates data-independent preferences for some classes and others. For example, if your dataset is unbalanced, say, has much more cat images than those of dogs, then the bias term for label *cat* will be higher. 
+
+
+
+### Viewpoint: Template Matching
+
+
+
+ What actually the linear classifier is doing? One point of view is **Template Matching**. 
+
+<br>
+
+![image-20201005195242004](images/image-20201005195242004.png)
+
+
+
+ The classifier takes in 2 x 2 image, stretch it out into a single vector. The weight matrix of the classifier has a shape of (4, 3), each row representing each of the class labels. There is an additional bias vector, which is data-independent. The inner product(*=dot product*) of each row of weight matrix and pixels of the input image is the **score for each label**. 
+
+ In this point of view, each of weight matrix corresponds to some template of the image, and the dot product of between the row and column of pixels corresponds to the similarity between template of class and pixels of the image. The linear classifier's job here is to match pixels of images into a template of label, using the weight matrix; and bias, of course.
+
+<br>
+
+ So, let's take the rows of weight matrix, and unravel them back to images. This way, we can visualize templates of a linear classifier to some form of images. It'll give us a sense of what the classifier is doing.
+
+
+
+![image-20201005195634871](images/image-20201005195634871.png)
+
+ Cool, but weird. Look at *horse*. A horse has two heads! This is because the linear classifier is only learning 1 template for each class every time. When variation comes in, the classifier tries to average all the variations and use just 1 single template to categorize images.
+
+
+
+### Viewpoint: Drawing a Line
+
+
+
+ Let's take another point of view. Think of images as points in high-dimensional space. 
+
+![image-20201005195951142](images/image-20201005195951142.png)
+
+ Then, the task of linear classifier can be interpreted as drawing linear decision boundary between scattered data points. That means, the linear classifier classifies images of one category against images of all other categories throughout the process of training. 
+
+<br>
+
+ With this viewpoint, problem comes out that there are hard cases for a linear classifier to do its job. That is, the classifier cannot draw decision boundaries between data points. 
+
+![image-20201005200103749](images/image-20201005200103749.png)
+
+* odd/even, XOR.
+* parity
+* multimodal situation (*analogy of islands of horses facing different way*)
+
+
+
+### Summary
+
+
+
+![image-20201005200332020](images/image-20201005200332020.png)
+
