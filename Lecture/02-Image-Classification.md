@@ -1,4 +1,4 @@
-<sup> [CS231n Spring 2017 2강](https://www.youtube.com/watch?v=OoUX-nOEjG0&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk&index=2)을 듣고 정리한 내용입니다. 모든 이미지는 해당 강의 영상을 바탕으로 합니다.</sup>
+<sup> [CS231n Spring 2017 2강](https://www.youtube.com/watch?v=OoUX-nOEjG0&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk&index=2)을 듣고 정리한 내용입니다.  첨부된 모든 이미지는 해당 강의 영상을 바탕으로 합니다.</sup>
 
 
 
@@ -14,7 +14,7 @@
 
 
 
- The task of image classification is basically that a computer system aware of predetermined fixed category labels looks into an image, and then assign that image one of those labels. Seems easy for human, but it's not that simple for a machine to do so.
+ The *task* of image classification is basically that a computer system aware of predetermined fixed category labels **looks into an image**, and then **assign** that image **one of those labels**. Seems easy for human, but it's not that simple for a machine to do so.
 
  A computer cannot get holistic idea of what an image represents for. What computer recognizes is a gigantic grid of numbers  between 0 and 255, where each pixel is represented by 3 numbers giving the red, green and blue values(3 channels of RGB). This is where the problem of **semantic gap** kicks in. What the label means is basically semantic, but pixel values are numeric. 
 
@@ -214,7 +214,65 @@ class NearestNeighbor:
 
  Another strategy, yet quite commonly used, which is called cross-validation. Split the whole data set into many different folds and cycle through choosing validation set. Even though you can get higher confidence, this approach is not used in DL much, because it's highly computationally expensive.
 
+<br>
+
+> *Q) Test set not being representative of data out there?*
+>
+>  Actually, when collecting data, there's an underlying assumption that all data are **i.i.d**. That means, we suppose that all of the data points are drawn from the same underlying probability distribution.
+>
+>  However, this might not always be the case, and this can definitely be a problem *in practice*. One possible solution (*instructor himself*), for example, might be go and collect a whole bunch of data all at once using the exact same methodology, and then afterwards partition it randomly between train and test. 
+>
+>  This can still be a problem, though, when collecting data over time and making earlier data be training data, and the later data be testing data (=빅콘테스트 기간 동안 만들고자 했던 **시간에 강건한 시계열 모형**을 만들기 위해 데이터셋을 구성하는 방법을 떠올려 보자.) *Anyway*, **as long as** the partition is random among the entire set of data points, the problem can be **alleviated**. 
 
 
 
+ When adopting CV approach, choosing the best hyperparmeters based on the graph below can be a good option.
 
+![image-20201004211119663](images/image-20201004211119663.png)
+
+* x-axis: value of k.
+* accuracy of classifier on some dataset for diff values of k.
+
+  In this case, 5-fold CV was done, and each of 5 different points on the same x-axis represent accuracy.
+
+<br>
+
+### Applying KNN in practice
+
+
+
+ To wrap up, KNN classifier on images is almost never used in practice for those three reasons.
+
+
+
+1. Very slow at test time
+
+ As explained earlier, with N examples, training KNN classifier takes O(1), while prediction takes O(N). This is bad. We want our classifiers to be fast at prediction stage. Being slow at training stage is OK. In this point of view, KNN classifiers are somewhat *reversive* (or, not efficient).
+
+<br>
+
+2. Varying results upon distance metrics
+
+ Applying distance metrics on pixels is not a really good way. As you can see below, the L2 distance between normal and distorted images are the same.
+
+![image-20201004212222262](images/image-20201004212222262.png)
+
+<br>
+
+3. Curse of dimensionality
+
+![image-20201004211527627](images/image-20201004211527627.png)
+
+
+
+ Here's a good analogy for classifying; dropping paint over scattered data points in a space and draw a line to partition the space. It means that if we expect the knn classifier to work well, we need our training examples to cover the space quite **densely**. Otherwise, nearest neighbors could be quite *far away*, and *might not actually be very similar* to our **testing points**. 
+
+The problem is that, in order to densely cover the space, we need a number of training examples, which is **exponential in the dimension** of the problem. Let alone the exponentiality, basically, we cannot get enough number of images to densely cover this space of pixels in this high dimensional space.
+
+
+
+<br>
+
+### Summary
+
+![image-20201004212007342](images/image-20201004212007342.png)

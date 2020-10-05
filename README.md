@@ -1,4 +1,4 @@
-# dl-study
+# dl-study-CS231n
 
 
 
@@ -6,5 +6,11 @@
 
 
 
-## 1. 계획
+## 01. Introduction
+
+<br>
+
+## 02. Image Classification
+
+강의 필기, 코드 연습. 
 
